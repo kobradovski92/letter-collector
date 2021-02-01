@@ -1,5 +1,7 @@
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
 import java.awt.Point;
 
 import org.junit.Test;
@@ -8,6 +10,7 @@ import exceptions.MultiplePathEndsException;
 import exceptions.MultiplePathStartsException;
 import exceptions.NoPathEndException;
 import exceptions.NoPathStartException;
+import exceptions.UnclearDirectionException;
 
 public class LetterCollectorTest {
    @Test
@@ -102,5 +105,158 @@ public class LetterCollectorTest {
       letterCollector.findPathEnd(path);
 
       // then
+   }
+
+   @Test
+   public void findPathDirection_DirectionRightOnlyPossible_DirectionRightIsReturned() throws Exception {
+      //given
+      char[][] path = {
+            {'@','-','-','-','A','-','-','-','+'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','C'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {'x','-','B','-','-','-','-','-','+'},
+      };
+      Point currentPosition = new Point(0, 0);
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      Direction pathDirection = letterCollector.findPathDirection(path, currentPosition, null);
+
+      //then
+      assertThat(pathDirection, is(Direction.RIGHT));
+   }
+
+   @Test
+   public void findPathDirection_DirectionLeftOnlyPossible_DirectionLeftIsReturned() throws Exception {
+      //given
+      char[][] path = {
+            {'@','-','-','-','A','-','-','-','+'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','C'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {'x','-','B','-','-','-','-','-','+'},
+      };
+      Point currentPosition = new Point(6,8);
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      Direction pathDirection = letterCollector.findPathDirection(path, currentPosition, Direction.DOWN);
+
+      //then
+      assertThat(pathDirection, is(Direction.LEFT));
+   }
+
+   @Test
+   public void findPathDirection_DirectionDownOnlyPossible_DirectionDownIsReturned() throws Exception {
+      //given
+      char[][] path = {
+            {'@','-','-','-','A','-','-','-','+'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','C'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {'x','-','B','-','-','-','-','-','+'},
+      };
+      Point currentPosition = new Point(0,8);
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      Direction pathDirection = letterCollector.findPathDirection(path, currentPosition, Direction.RIGHT);
+
+      //then
+      assertThat(pathDirection, is(Direction.DOWN));
+   }
+
+   @Test
+   public void findPathDirection_DirectionUpOnlyPossible_DirectionUpIsReturned() throws Exception {
+      //given
+      char[][] path = {
+            {'|','-','-','-','A','-','-','-','+'},
+            {'@',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','C'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {'x','-','B','-','-','-','-','-','+'},
+      };
+      Point currentPosition = new Point(1,0);
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      Direction pathDirection = letterCollector.findPathDirection(path, currentPosition, null);
+
+      //then
+      assertThat(pathDirection, is(Direction.UP));
+   }
+
+   @Test(expected = UnclearDirectionException.class)
+   public void findPathDirection_CurrentLocationIsOnTCross_UnclearDirectionExceptionIsThrown() throws Exception {
+      //given
+      char[][] path = {
+            {'|','-','-','-','A','-','-','-','+'},
+            {'@',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ','-','-','C'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {'x','-','B','-','-','-','-','-','+'},
+      };
+      Point currentPosition = new Point(3,8);
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      Direction pathDirection = letterCollector.findPathDirection(path, currentPosition, Direction.DOWN);
+
+      //then
+   }
+
+   @Test
+   public void findPathDirection_LeftAndRightDirectionPossibleWithCurrentDirectionRight_DirectionRightIsReturned() throws Exception {
+      //given
+      char[][] path = {
+            {'|','-','-','-','A','-','-','-','+'},
+            {'@',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','C'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {'x','-','B','-','-','-','-','-','+'},
+      };
+      Point currentPosition = new Point(0,4);
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      Direction pathDirection = letterCollector.findPathDirection(path, currentPosition, Direction.RIGHT);
+
+      //then
+      assertThat(pathDirection, is(Direction.RIGHT));
+   }
+
+   @Test
+   public void findPathDirection_UpAndDownDirectionPossibleWithCurrentDirectionDown_DirectionDownIsReturned() throws Exception {
+      //given
+      char[][] path = {
+            {'|','-','-','-','A','-','-','-','+'},
+            {'@',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','C'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
+            {'x','-','B','-','-','-','-','-','+'},
+      };
+      Point currentPosition = new Point(3,8);
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      Direction pathDirection = letterCollector.findPathDirection(path, currentPosition, Direction.DOWN);
+
+      //then
+      assertThat(pathDirection, is(Direction.DOWN));
    }
 }
