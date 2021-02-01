@@ -53,6 +53,5 @@ public class LetterCollectorTest {
       letterCollector.findPathStart(path);
 
       // then
-
    }
 }
