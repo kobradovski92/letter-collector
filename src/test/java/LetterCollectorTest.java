@@ -16,7 +16,7 @@ public class LetterCollectorTest {
       LetterCollector letterCollector = new LetterCollector();
       char[][] path = {
             {'-',' ','-'},
-            {' ', '@', '-'}
+            {' ', LetterCollector.PATH_START_CHARACTER, '-'}
       };
 
       // when
@@ -32,8 +32,8 @@ public class LetterCollectorTest {
       // given
       LetterCollector letterCollector = new LetterCollector();
       char[][] path = {
-            {'-','@','-'},
-            {' ', '@', '-'}
+            {'-',LetterCollector.PATH_START_CHARACTER,'-'},
+            {' ', LetterCollector.PATH_START_CHARACTER, '-'}
       };
 
       // when
@@ -63,7 +63,7 @@ public class LetterCollectorTest {
       LetterCollector letterCollector = new LetterCollector();
       char[][] path = {
             {'-',' ','-'},
-            {' ', 'x', '-'}
+            {' ', LetterCollector.PATH_END_CHARACTER, '-'}
       };
 
       // when
@@ -79,8 +79,8 @@ public class LetterCollectorTest {
       // given
       LetterCollector letterCollector = new LetterCollector();
       char[][] path = {
-            {'-','x','-'},
-            {' ', 'x', '-'}
+            {'-',LetterCollector.PATH_END_CHARACTER,'-'},
+            {' ', LetterCollector.PATH_END_CHARACTER, '-'}
       };
 
       // when

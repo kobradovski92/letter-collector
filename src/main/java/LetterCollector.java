@@ -8,9 +8,12 @@ import exceptions.NoPathEndException;
 import exceptions.NoPathStartException;
 
 public class LetterCollector {
+   public static final char PATH_START_CHARACTER = '@';
+   public static final char PATH_END_CHARACTER = 'x';
+
    public Point findPathStart(char[][] path) throws NoPathStartException, MultiplePathStartsException {
       try {
-         return findUniquePathCharacter(path, '@');
+         return findUniquePathCharacter(path, PATH_START_CHARACTER);
       } catch (CharacterNotFoundException characterNotFoundException) {
          throw new NoPathStartException();
       } catch (CharacterNotUniqueException characterNotUniqueException) {
@@ -20,7 +23,7 @@ public class LetterCollector {
 
    public Point findPathEnd(char[][] path) throws NoPathEndException, MultiplePathEndsException {
       try {
-         return findUniquePathCharacter(path, 'x');
+         return findUniquePathCharacter(path, PATH_END_CHARACTER);
       } catch (CharacterNotFoundException characterNotFoundException) {
          throw new NoPathEndException();
       } catch (CharacterNotUniqueException characterNotUniqueException) {
