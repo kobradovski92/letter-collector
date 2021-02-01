@@ -4,7 +4,9 @@ import java.awt.Point;
 
 import org.junit.Test;
 
+import exceptions.MultiplePathEndsException;
 import exceptions.MultiplePathStartsException;
+import exceptions.NoPathEndException;
 import exceptions.NoPathStartException;
 
 public class LetterCollectorTest {
@@ -51,6 +53,53 @@ public class LetterCollectorTest {
 
       // when
       letterCollector.findPathStart(path);
+
+      // then
+   }
+
+   @Test
+   public void findPathEnd_OnePathEndCharacter_EndCharacterCoordinatesReturned() throws Exception {
+      // given
+      LetterCollector letterCollector = new LetterCollector();
+      char[][] path = {
+            {'-',' ','-'},
+            {' ', 'x', '-'}
+      };
+
+      // when
+      Point pathStart = letterCollector.findPathEnd(path);
+
+      // then
+      assertThat(pathStart.x, equalTo(1));
+      assertThat(pathStart.y, equalTo(1));
+   }
+
+   @Test(expected = MultiplePathEndsException.class)
+   public void findPathEnd_MultiplePathEndCharacters_MultiplePathEndsExceptionIsThrown() throws Exception {
+      // given
+      LetterCollector letterCollector = new LetterCollector();
+      char[][] path = {
+            {'-','x','-'},
+            {' ', 'x', '-'}
+      };
+
+      // when
+      letterCollector.findPathEnd(path);
+
+      // then
+   }
+
+   @Test(expected = NoPathEndException.class)
+   public void findPathEnd_NoPathEndCharacter_NoPathEndExceptionIsThrown() throws Exception {
+      // given
+      LetterCollector letterCollector = new LetterCollector();
+      char[][] path = {
+            {'-',' ','-'},
+            {' ', '-'}
+      };
+
+      // when
+      letterCollector.findPathEnd(path);
 
       // then
    }

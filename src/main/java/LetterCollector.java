@@ -2,7 +2,9 @@ import java.awt.Point;
 
 import exceptions.CharacterNotFoundException;
 import exceptions.CharacterNotUniqueException;
+import exceptions.MultiplePathEndsException;
 import exceptions.MultiplePathStartsException;
+import exceptions.NoPathEndException;
 import exceptions.NoPathStartException;
 
 public class LetterCollector {
@@ -13,6 +15,16 @@ public class LetterCollector {
          throw new NoPathStartException();
       } catch (CharacterNotUniqueException characterNotUniqueException) {
          throw new MultiplePathStartsException();
+      }
+   }
+
+   public Point findPathEnd(char[][] path) throws NoPathEndException, MultiplePathEndsException {
+      try {
+         return findUniquePathCharacter(path, 'x');
+      } catch (CharacterNotFoundException characterNotFoundException) {
+         throw new NoPathEndException();
+      } catch (CharacterNotUniqueException characterNotUniqueException) {
+         throw new MultiplePathEndsException();
       }
    }
 
