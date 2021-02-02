@@ -259,4 +259,56 @@ public class LetterCollectorTest {
       //then
       assertThat(pathDirection, is(Direction.DOWN));
    }
+
+   @Test
+   public void isObstacle_GivenCharacterIsNotAnObstacle_ReturnsFalse() {
+      //given
+      char nonObstacleChar = '-';
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      boolean obstacle = letterCollector.isObstacle(nonObstacleChar);
+
+      //then
+      assertThat(obstacle, is(false));
+   }
+
+   @Test
+   public void isObstacle_GivenCharacterIsLetter_ReturnsTrue() {
+      //given
+      char obstacleChar = 'C';
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      boolean obstacle = letterCollector.isObstacle(obstacleChar);
+
+      //then
+      assertThat(obstacle, is(true));
+   }
+
+   @Test
+   public void isObstacle_GivenCharacterIsPathEnd_ReturnsTrue() {
+      //given
+      char obstacleChar = 'x';
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      boolean obstacle = letterCollector.isObstacle(obstacleChar);
+
+      //then
+      assertThat(obstacle, is(true));
+   }
+
+   @Test
+   public void isObstacle_GivenCharacterIsCornerSymbol_ReturnsTrue() {
+      //given
+      char obstacleChar = '+';
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      boolean obstacle = letterCollector.isObstacle(obstacleChar);
+
+      //then
+      assertThat(obstacle, is(true));
+   }
 }

@@ -17,25 +17,25 @@ public class LetterCollector {
    public Direction findPathDirection(char[][] path, Point currentPosition, Direction currentDirection) throws UnclearDirectionException {
       char firstCharToRight = (currentPosition.y < (path[currentPosition.x].length - 1)) ? path[currentPosition.x][currentPosition.y + 1] : ' ';
       char firstCharToLeft = (currentPosition.y > 0) ? path[currentPosition.x][currentPosition.y - 1] : ' ';
-      char firstCharToDown = (currentPosition.x < (path.length - 1)) ? path[currentPosition.x+1][currentPosition.y] : ' ';
-      char firstCharToUp = (currentPosition.x > 0) ? path[currentPosition.x-1][currentPosition.y] : ' ';
+      char firstCharToDown = (currentPosition.x < (path.length - 1)) ? path[currentPosition.x + 1][currentPosition.y] : ' ';
+      char firstCharToUp = (currentPosition.x > 0) ? path[currentPosition.x - 1][currentPosition.y] : ' ';
 
       Direction direction = null;
       int numberOfPossibleDirections = 0;
 
-      if (currentDirection != Direction.LEFT && (firstCharToRight == HORIZONTAL_PATH_CHARACTER || (firstCharToRight >= 'A' && firstCharToRight <= 'Z' ))) {
+      if (currentDirection != Direction.LEFT && (firstCharToRight == HORIZONTAL_PATH_CHARACTER || (firstCharToRight >= 'A' && firstCharToRight <= 'Z'))) {
          direction = Direction.RIGHT;
          numberOfPossibleDirections++;
       }
-      if (currentDirection != Direction.RIGHT && (firstCharToLeft == HORIZONTAL_PATH_CHARACTER || (firstCharToLeft >= 'A' && firstCharToLeft <= 'Z' ))) {
+      if (currentDirection != Direction.RIGHT && (firstCharToLeft == HORIZONTAL_PATH_CHARACTER || (firstCharToLeft >= 'A' && firstCharToLeft <= 'Z'))) {
          direction = Direction.LEFT;
          numberOfPossibleDirections++;
       }
-      if (currentDirection != Direction.UP && (firstCharToDown == VERTICAL_PATH_CHARACTER || (firstCharToDown >= 'A' && firstCharToDown <= 'Z' ))) {
+      if (currentDirection != Direction.UP && (firstCharToDown == VERTICAL_PATH_CHARACTER || (firstCharToDown >= 'A' && firstCharToDown <= 'Z'))) {
          direction = Direction.DOWN;
          numberOfPossibleDirections++;
       }
-      if (currentDirection != Direction.DOWN && (firstCharToUp == VERTICAL_PATH_CHARACTER || (firstCharToUp >= 'A' && firstCharToUp <= 'Z' ))) {
+      if (currentDirection != Direction.DOWN && (firstCharToUp == VERTICAL_PATH_CHARACTER || (firstCharToUp >= 'A' && firstCharToUp <= 'Z'))) {
          direction = Direction.UP;
          numberOfPossibleDirections++;
       }
@@ -68,7 +68,7 @@ public class LetterCollector {
    }
 
    private Point findUniquePathCharacter(char[][] path, char character) throws CharacterNotUniqueException, CharacterNotFoundException {
-      Point pathStart = new Point(-1,-1);
+      Point pathStart = new Point(-1, -1);
       for (int i = 0; i < path.length; i++) {
          for (int j = 0; j < path[i].length; j++) {
             if (path[i][j] == character) {
@@ -85,5 +85,11 @@ public class LetterCollector {
       } else {
          throw new CharacterNotFoundException();
       }
+   }
+
+   public boolean isObstacle(char character) {
+      return (character == '+'
+            || (character > 'A' && character < 'Z')
+            || character == 'x');
    }
 }
