@@ -113,7 +113,7 @@ public class LetterCollector {
       pathAsCharacters.deleteCharAt(pathAsCharacters.length() - 1);
    }
 
-   private boolean isLetter(char character) {
+   public boolean isLetter(char character) {
       return character >= 'A' && character <= 'Z';
    }
 

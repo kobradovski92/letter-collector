@@ -339,7 +339,7 @@ public class LetterCollectorTest {
    }
 
    @Test
-   public void moveAndCollectUntilObstacle_movingRight_StoppedAtObstacleAndCollectedPathPiecesUntilObstacle() {
+   public void moveAndCollectUntilObstacle_MovingRight_StoppedAtObstacleAndCollectedPathPiecesUntilObstacle() {
       //given
       char[][] path = {
             {'@','-','-','-','A','-','-','-','+'},
@@ -367,7 +367,7 @@ public class LetterCollectorTest {
    }
 
    @Test
-   public void moveAndCollectUntilObstacle_movingLeft_StoppedAtObstacleAndCollectedPathPiecesUntilObstacle() {
+   public void moveAndCollectUntilObstacle_MovingLeft_StoppedAtObstacleAndCollectedPathPiecesUntilObstacle() {
       //given
       char[][] path = {
             {'@','-','-','-','A','-','-','-','+'},
@@ -381,7 +381,7 @@ public class LetterCollectorTest {
       LetterCollector letterCollector = new LetterCollector();
       Point currentPosition = new Point(6,8);
       Direction currentDirection = Direction.LEFT;
-      StringBuilder pathAsCharacters = new StringBuilder();
+      StringBuilder pathAsCharacters = new StringBuilder("@---A---+||C||+");
 
       Point firstObstacleCoordinates = new Point(6, 2);
 
@@ -391,11 +391,11 @@ public class LetterCollectorTest {
       //then
       assertThat(currentPosition.x, is(firstObstacleCoordinates.x));
       assertThat(currentPosition.y, is(firstObstacleCoordinates.y));
-      assertThat(pathAsCharacters.toString(), equalTo("-----"));
+      assertThat(pathAsCharacters.toString(), equalTo("@---A---+||C||+-----"));
    }
 
    @Test
-   public void moveAndCollectUntilObstacle_movingUp_StoppedAtObstacleAndCollectedPathPiecesUntilObstacle() {
+   public void moveAndCollectUntilObstacle_MovingUp_StoppedAtObstacleAndCollectedPathPiecesUntilObstacle() {
       //given
       char[][] path = {
             {'@','-','-','-','A','-','-','-','+'},
@@ -423,7 +423,7 @@ public class LetterCollectorTest {
    }
 
    @Test
-   public void moveAndCollectUntilObstacle_movingDown_StoppedAtObstacleAndCollectedPathPiecesUntilObstacle() {
+   public void moveAndCollectUntilObstacle_MovingDown_StoppedAtObstacleAndCollectedPathPiecesUntilObstacle() {
       //given
       char[][] path = {
             {'@','-','-','-','A','-','-','-','+'},
@@ -437,7 +437,7 @@ public class LetterCollectorTest {
       LetterCollector letterCollector = new LetterCollector();
       Point currentPosition = new Point(3,8);
       Direction currentDirection = Direction.DOWN;
-      StringBuilder pathAsCharacters = new StringBuilder();
+      StringBuilder pathAsCharacters = new StringBuilder("@---A---+");
 
       Point firstObstacleCoordinates = new Point(6, 8);
 
@@ -447,6 +447,7 @@ public class LetterCollectorTest {
       //then
       assertThat(currentPosition.x, is(firstObstacleCoordinates.x));
       assertThat(currentPosition.y, is(firstObstacleCoordinates.y));
-      assertThat(pathAsCharacters.toString(), equalTo("||"));
+      assertThat(pathAsCharacters.toString(), equalTo("@---A---+||"));
    }
+
 }
