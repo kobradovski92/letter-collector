@@ -6,11 +6,13 @@ import java.awt.Point;
 
 import org.junit.Test;
 
+import enums.Direction;
 import exceptions.MultiplePathEndsException;
 import exceptions.MultiplePathStartsException;
 import exceptions.NoPathEndException;
 import exceptions.NoPathStartException;
 import exceptions.UnclearDirectionException;
+import model.ResolvedPath;
 
 public class LetterCollectorTest {
    @Test
@@ -261,6 +263,47 @@ public class LetterCollectorTest {
    }
 
    @Test
+   public void findPathDirection_TightSpace_KeepTheCurrentDirection() throws Exception {
+      //given
+      char[][] path = {
+            {' ', '+', '-', 'B', '-', '+', ' ', ' ', ' '},
+            {' ', '|', ' ', ' ', '+', 'C', '-', '+', ' '},
+            {'@', 'A', '+', ' ', '+', '+', ' ', 'D', ' '},
+            {' ', '+', '+', ' ', ' ', ' ', ' ', 'x', ' '},
+      };
+      Point currentPosition = new Point(2, 0);
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      Direction pathDirection = letterCollector.findPathDirection(path, currentPosition, Direction.RIGHT);
+
+      //then
+      assertThat(pathDirection, is(Direction.RIGHT));
+   }
+
+   @Test
+   public void findPathDirection_Intersection_KeepTheCurrentDirection() throws Exception {
+      //given
+      char[][] path = {
+            {'@', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {'|', ' ', '+', '-', 'C', '-', '-', '+', ' ', ' '},
+            {'A', ' ', '|', ' ', ' ', ' ', ' ', '|', ' ', ' '},
+            {'+', '-', '-', '-', 'B', '-', '-', '+', ' ', ' '},
+            {' ', ' ', '|', ' ', ' ', '-', '-', '-', ' ', 'x'},
+            {' ', ' ', '|', ' ', ' ', ' ', ' ', ' ', ' ', '|'},
+            {' ', ' ', '+', '-', '-', '-', 'D', '-', '-', '+'},
+      };
+      Point currentPosition = new Point(3, 2);
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      Direction pathDirection = letterCollector.findPathDirection(path, currentPosition, Direction.RIGHT);
+
+      //then
+      assertThat(pathDirection, is(Direction.RIGHT));
+   }
+
+   @Test
    public void isObstacle_GivenCharacterIsNotAnObstacle_ReturnsFalse() {
       //given
       char nonObstacleChar = '-';
@@ -452,7 +495,7 @@ public class LetterCollectorTest {
 
 
    @Test
-   public void collectIfLetter_NoLetterAtCurrentPosition_NothingIsCollected() {
+   public void collectIfLetterAndUnique_NoLetterAtCurrentPosition_NothingIsCollected() {
       //given
       char[][] path = {
             {'@', '-', '-', '-', 'A', '-', '-', '-', '+'},
@@ -469,14 +512,14 @@ public class LetterCollectorTest {
       Point currentPosition = new Point(6, 8);
 
       //when
-      letterCollector.collectIfLetter(path, currentPosition, collectedLetters);
+      letterCollector.collectIfLetterAndUnique(path, currentPosition, collectedLetters);
 
       //then
       assertThat(collectedLetters.toString(), equalTo(previouslyCollectedLetters));
    }
 
    @Test
-   public void collectIfLetter_LetterAtCurrentPosition_CorrectLetterIsCollected() {
+   public void collectIfLetterAndUnique_NotAlreadyCollectedLetterAtCurrentPosition_CorrectLetterIsCollected() {
       //given
       char[][] path = {
             {'@', '-', '-', '-', 'A', '-', '-', '-', '+'},
@@ -493,9 +536,157 @@ public class LetterCollectorTest {
       Point currentPosition = new Point(6, 2);
 
       //when
-      letterCollector.collectIfLetter(path, currentPosition, collectedLetters);
+      letterCollector.collectIfLetterAndUnique(path, currentPosition, collectedLetters);
 
       //then
       assertThat(collectedLetters.toString(), equalTo(previouslyCollectedLetters + 'B'));
    }
+
+   @Test
+   public void collectIfLetterAndUnique_AlreadyCollectedLetterAtCurrentPosition_NothingIsCollected() {
+      //given
+      char[][] path = {
+            {'@', '-', '-', '-', 'A', '-', '-', '-', '+'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'C'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|'},
+            {'x', '-', 'B', '-', '-', '-', '-', '-', '+'},
+      };
+      LetterCollector letterCollector = new LetterCollector();
+      String previouslyCollectedLetters = "AC";
+      StringBuilder collectedLetters = new StringBuilder(previouslyCollectedLetters);
+      Point currentPosition = new Point(6, 2);
+
+      //when
+      letterCollector.collectIfLetterAndUnique(path, currentPosition, collectedLetters);
+
+      //then
+      assertThat(collectedLetters.toString(), equalTo(previouslyCollectedLetters + 'B'));
+   }
+
+   // **********EXAMPLES FROM GIT!*********** //
+
+   //EXAMPLE1
+   @Test
+   public void resolvePath_PathExampleOne_RightLettersAreCollectedAndRightPathTraveled() throws Exception{
+      //given
+      char[][] path = {
+            {'@', '-', '-', '-', 'A', '-', '-', '-', '+'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|'},
+            {'x', '-', 'B', '-', '+', ' ', ' ', ' ', 'C'},
+            {' ', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|'},
+            {' ', ' ', ' ', ' ', '+', '-', '-', '-', '+'},
+      };
+      LetterCollector letterCollector = new LetterCollector();
+      String expectedPathAsCharactersResult = "@---A---+|C|+---+|+-B-x";
+      String expectedCollectedLettersResult = "ACB";
+
+
+      //when
+      ResolvedPath resolvedPath = letterCollector.resolvePath(path);
+
+      //then
+      assertThat(resolvedPath.getPathAsCharacters(), equalTo(expectedPathAsCharactersResult));
+      assertThat(resolvedPath.getCollectedLetters(), equalTo(expectedCollectedLettersResult));
+   }
+
+   //EXAMPLE2
+   @Test
+   public void resolvePath_PathExampleTwo_RightLettersAreCollectedAndRightPathTraveled() throws Exception{
+      //given
+      char[][] path = {
+            {'@', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {'|', ' ', '+', '-', 'C', '-', '-', '+', ' ', ' '},
+            {'A', ' ', '|', ' ', ' ', ' ', ' ', '|', ' ', ' '},
+            {'+', '-', '-', '-', 'B', '-', '-', '+', ' ', ' '},
+            {' ', ' ', '|', ' ', ' ', '-', '-', '-', ' ', 'x'},
+            {' ', ' ', '|', ' ', ' ', ' ', ' ', ' ', ' ', '|'},
+            {' ', ' ', '+', '-', '-', '-', 'D', '-', '-', '+'},
+      };
+      LetterCollector letterCollector = new LetterCollector();
+      String expectedPathAsCharactersResult = "@|A+---B--+|+--C-+|-||+---D--+|x";
+      String expectedCollectedLettersResult = "ABCD";
+
+
+      //when
+      ResolvedPath resolvedPath = letterCollector.resolvePath(path);
+
+      //then
+      assertThat(resolvedPath.getPathAsCharacters(), equalTo(expectedPathAsCharactersResult));
+      assertThat(resolvedPath.getCollectedLetters(), equalTo(expectedCollectedLettersResult));
+   }
+
+   //EXAMPLE3
+   @Test
+   public void resolvePath_PathExampleThree_RightLettersAreCollectedAndRightPathTraveled() throws Exception{
+      //given
+      char[][] path = {
+            {'@', '-', '-', '-', 'A', '-', '-', '-', '+'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|'},
+            {'x', '-', 'B', '-', '+', ' ', ' ', ' ', '|'},
+            {' ', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|'},
+            {' ', ' ', ' ', ' ', '+', '-', '-', '-', 'C'},
+      };
+      LetterCollector letterCollector = new LetterCollector();
+      String expectedPathAsCharactersResult = "@---A---+|||C---+|+-B-x";
+      String expectedCollectedLettersResult = "ACB";
+
+
+      //when
+      ResolvedPath resolvedPath = letterCollector.resolvePath(path);
+
+      //then
+      assertThat(resolvedPath.getPathAsCharacters(), equalTo(expectedPathAsCharactersResult));
+      assertThat(resolvedPath.getCollectedLetters(), equalTo(expectedCollectedLettersResult));
+   }
+
+   //EXAMPLE4
+   @Test
+   public void resolvePath_PathExampleFour_RightLettersAreCollectedAndRightPathTraveled() throws Exception{
+      //given
+      char[][] path = {
+            {' ', ' ', ' ', '+', '-', '-', 'B', '-', '-', '+', ' ', ' '},
+            {' ', ' ', ' ', '|', ' ', ' ', ' ', '+', '-', 'C', '-', '+'},
+            {'@', '-', '-', 'A', '-', '+', ' ', '|', ' ', '|', ' ', '|'},
+            {' ', ' ', ' ', '|', ' ', '|', ' ', '+', '-', '+', ' ', 'D'},
+            {' ', ' ', ' ', '+', '-', '+', ' ', ' ', ' ', ' ', ' ', '|'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x'},
+      };
+      LetterCollector letterCollector = new LetterCollector();
+      String expectedPathAsCharactersResult = "@--A-+|+-+|A|+--B--+C|+-+|+-C-+|D|x";
+      String expectedCollectedLettersResult = "ABCD";
+
+
+      //when
+      ResolvedPath resolvedPath = letterCollector.resolvePath(path);
+
+      //then
+      assertThat(resolvedPath.getPathAsCharacters(), equalTo(expectedPathAsCharactersResult));
+      assertThat(resolvedPath.getCollectedLetters(), equalTo(expectedCollectedLettersResult));
+   }
+   //EXAMPLE5
+   @Test
+   public void resolvePath_PathExampleFive_RightLettersAreCollectedAndRightPathTraveled() throws Exception{
+      //given
+      char[][] path = {
+            {' ', '+', '-', 'B', '-', '+', ' ', ' ', ' '},
+            {' ', '|', ' ', ' ', '+', 'C', '-', '+', ' '},
+            {'@', 'A', '+', ' ', '+', '+', ' ', 'D', ' '},
+            {' ', '+', '+', ' ', ' ', ' ', ' ', 'x', ' '},
+      };
+      LetterCollector letterCollector = new LetterCollector();
+      String expectedPathAsCharactersResult = "@A+++A|+-B-+C+++C-+Dx";
+      String expectedCollectedLettersResult = "ABCD";
+
+
+      //when
+      ResolvedPath resolvedPath = letterCollector.resolvePath(path);
+
+      //then
+      assertThat(resolvedPath.getPathAsCharacters(), equalTo(expectedPathAsCharactersResult));
+      assertThat(resolvedPath.getCollectedLetters(), equalTo(expectedCollectedLettersResult));
+   }
+
 }

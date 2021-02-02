@@ -1,5 +1,6 @@
 import java.awt.Point;
 
+import enums.Direction;
 import exceptions.CharacterNotFoundException;
 import exceptions.CharacterNotUniqueException;
 import exceptions.MultiplePathEndsException;
@@ -7,6 +8,7 @@ import exceptions.MultiplePathStartsException;
 import exceptions.NoPathEndException;
 import exceptions.NoPathStartException;
 import exceptions.UnclearDirectionException;
+import model.ResolvedPath;
 
 public class LetterCollector {
    public static final char PATH_START_CHARACTER = '@';
@@ -23,25 +25,27 @@ public class LetterCollector {
       Direction direction = null;
       int numberOfPossibleDirections = 0;
 
-      if (currentDirection != Direction.LEFT && (firstCharToRight == HORIZONTAL_PATH_CHARACTER || (isLetter(firstCharToRight)))) {
+      if (currentDirection != Direction.LEFT && (firstCharToRight == HORIZONTAL_PATH_CHARACTER || (isLetter(firstCharToRight)) || firstCharToRight == '+' || firstCharToLeft == '@')) {
          direction = Direction.RIGHT;
          numberOfPossibleDirections++;
       }
-      if (currentDirection != Direction.RIGHT && (firstCharToLeft == HORIZONTAL_PATH_CHARACTER || (isLetter(firstCharToLeft)))) {
+      if (currentDirection != Direction.RIGHT && (firstCharToLeft == HORIZONTAL_PATH_CHARACTER || (isLetter(firstCharToLeft)) || firstCharToLeft == '+' || firstCharToLeft == '@')) {
          direction = Direction.LEFT;
          numberOfPossibleDirections++;
       }
-      if (currentDirection != Direction.UP && (firstCharToDown == VERTICAL_PATH_CHARACTER || (isLetter(firstCharToDown)))) {
+      if (currentDirection != Direction.UP && (firstCharToDown == VERTICAL_PATH_CHARACTER || (isLetter(firstCharToDown)) || firstCharToDown == '+' || firstCharToLeft == '@')) {
          direction = Direction.DOWN;
          numberOfPossibleDirections++;
       }
-      if (currentDirection != Direction.DOWN && (firstCharToUp == VERTICAL_PATH_CHARACTER || isLetter(firstCharToUp))) {
+      if (currentDirection != Direction.DOWN && (firstCharToUp == VERTICAL_PATH_CHARACTER || (isLetter(firstCharToUp)) || firstCharToUp == '+' || firstCharToLeft == '@')) {
          direction = Direction.UP;
          numberOfPossibleDirections++;
       }
 
-      if (numberOfPossibleDirections > 1) {
+      if (numberOfPossibleDirections == 2) {
          throw new UnclearDirectionException();
+      } else if (numberOfPossibleDirections > 2 || numberOfPossibleDirections == 0) {
+         return currentDirection;
       } else {
          return direction;
       }
@@ -88,26 +92,28 @@ public class LetterCollector {
    }
 
    public boolean isObstacle(char character) {
-      return (character == '+'
+      return (
+            character == '+'
             || (isLetter(character))
-            || character == 'x');
+            || character == 'x'
+      );
    }
 
 
    public void moveAndCollectUntilObstacle(char[][] path, Point currentPosition, Direction currentDirection, StringBuilder pathAsCharacters) {
+      Point startingPosition = new Point(currentPosition.x, currentPosition.y);
       do {
          if (currentDirection == Direction.RIGHT) {
             currentPosition.y++;
-            pathAsCharacters.append('-');
          } else if (currentDirection == Direction.LEFT) {
             currentPosition.y--;
-            pathAsCharacters.append('-');
          } else if (currentDirection == Direction.DOWN) {
             currentPosition.x++;
-            pathAsCharacters.append('|');
          } else if (currentDirection == Direction.UP) {
             currentPosition.x--;
-            pathAsCharacters.append('|');
+         }
+         if (!currentPosition.equals(startingPosition)) {
+            pathAsCharacters.append(path[currentPosition.x][currentPosition.y]);
          }
       } while (!isObstacle(path[currentPosition.x][currentPosition.y]));
       pathAsCharacters.deleteCharAt(pathAsCharacters.length() - 1);
@@ -117,10 +123,29 @@ public class LetterCollector {
       return character >= 'A' && character <= 'Z';
    }
 
-   public void collectIfLetter(char[][] path, Point currentPosition, StringBuilder collectedLetters) {
+   public void collectIfLetterAndUnique(char[][] path, Point currentPosition, StringBuilder collectedLetters) {
       char character = path[currentPosition.x][currentPosition.y];
-      if (isLetter(character)) {
+      if (isLetter(character) && collectedLetters.indexOf(Character.toString(character)) == -1) {
          collectedLetters.append(character);
       }
+   }
+
+   public ResolvedPath resolvePath(char[][] path) throws Exception {
+      Point currentPosition = findPathStart(path);
+      Point pathEnd = findPathEnd(path);
+
+      StringBuilder pathAsCharactersBuilder = new StringBuilder(Character.toString(path[currentPosition.x][currentPosition.y]));
+      StringBuilder collectedLettersBuilder = new StringBuilder();
+
+      Direction direction = null;
+
+     do {
+         direction = findPathDirection(path, currentPosition, direction);
+         moveAndCollectUntilObstacle(path, currentPosition, direction, pathAsCharactersBuilder);
+         pathAsCharactersBuilder.append(path[currentPosition.x][currentPosition.y]);
+         collectIfLetterAndUnique(path, currentPosition, collectedLettersBuilder);
+      } while (!currentPosition.equals(pathEnd));
+
+      return new ResolvedPath(pathAsCharactersBuilder.toString(), collectedLettersBuilder.toString());
    }
 }
