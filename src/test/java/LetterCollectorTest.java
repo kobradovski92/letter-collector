@@ -196,7 +196,7 @@ public class LetterCollectorTest {
    }
 
    @Test(expected = UnclearDirectionException.class)
-   public void findPathDirection_CurrentLocationIsOnTCross_UnclearDirectionExceptionIsThrown() throws Exception {
+   public void findPathDirection_currentPositionIsOnTCross_UnclearDirectionExceptionIsThrown() throws Exception {
       //given
       char[][] path = {
             {'+','-','-','-','A','-','-','-','+'},
@@ -351,18 +351,18 @@ public class LetterCollectorTest {
             {'x','-','B','-','-','-','-','-','+'},
       };
       LetterCollector letterCollector = new LetterCollector();
-      Point currentLocation = new Point(0,0);
+      Point currentPosition = new Point(0,0);
       Direction currentDirection = Direction.RIGHT;
       StringBuilder pathAsCharacters = new StringBuilder();
 
       Point firstObstacleCoordinates = new Point(0, 4);
 
       //when
-      letterCollector.moveAndCollectUntilObstacle(path, currentLocation, currentDirection, pathAsCharacters);
+      letterCollector.moveAndCollectUntilObstacle(path, currentPosition, currentDirection, pathAsCharacters);
 
       //then
-      assertThat(currentLocation.x, is(firstObstacleCoordinates.x));
-      assertThat(currentLocation.y, is(firstObstacleCoordinates.y));
+      assertThat(currentPosition.x, is(firstObstacleCoordinates.x));
+      assertThat(currentPosition.y, is(firstObstacleCoordinates.y));
       assertThat(pathAsCharacters.toString(), equalTo("---"));
    }
 
@@ -379,18 +379,18 @@ public class LetterCollectorTest {
             {'x','-','B','-','-','-','-','-','+'},
       };
       LetterCollector letterCollector = new LetterCollector();
-      Point currentLocation = new Point(6,8);
+      Point currentPosition = new Point(6,8);
       Direction currentDirection = Direction.LEFT;
       StringBuilder pathAsCharacters = new StringBuilder();
 
       Point firstObstacleCoordinates = new Point(6, 2);
 
       //when
-      letterCollector.moveAndCollectUntilObstacle(path, currentLocation, currentDirection, pathAsCharacters);
+      letterCollector.moveAndCollectUntilObstacle(path, currentPosition, currentDirection, pathAsCharacters);
 
       //then
-      assertThat(currentLocation.x, is(firstObstacleCoordinates.x));
-      assertThat(currentLocation.y, is(firstObstacleCoordinates.y));
+      assertThat(currentPosition.x, is(firstObstacleCoordinates.x));
+      assertThat(currentPosition.y, is(firstObstacleCoordinates.y));
       assertThat(pathAsCharacters.toString(), equalTo("-----"));
    }
 
@@ -407,18 +407,18 @@ public class LetterCollectorTest {
             {'x','-','B','-','-','-','-','-','+'},
       };
       LetterCollector letterCollector = new LetterCollector();
-      Point currentLocation = new Point(3,8);
+      Point currentPosition = new Point(3,8);
       Direction currentDirection = Direction.UP;
       StringBuilder pathAsCharacters = new StringBuilder();
 
       Point firstObstacleCoordinates = new Point(0, 8);
 
       //when
-      letterCollector.moveAndCollectUntilObstacle(path, currentLocation, currentDirection, pathAsCharacters);
+      letterCollector.moveAndCollectUntilObstacle(path, currentPosition, currentDirection, pathAsCharacters);
 
       //then
-      assertThat(currentLocation.x, is(firstObstacleCoordinates.x));
-      assertThat(currentLocation.y, is(firstObstacleCoordinates.y));
+      assertThat(currentPosition.x, is(firstObstacleCoordinates.x));
+      assertThat(currentPosition.y, is(firstObstacleCoordinates.y));
       assertThat(pathAsCharacters.toString(), equalTo("||"));
    }
 
@@ -435,18 +435,18 @@ public class LetterCollectorTest {
             {'x','-','B','-','-','-','-','-','+'},
       };
       LetterCollector letterCollector = new LetterCollector();
-      Point currentLocation = new Point(3,8);
+      Point currentPosition = new Point(3,8);
       Direction currentDirection = Direction.DOWN;
       StringBuilder pathAsCharacters = new StringBuilder();
 
       Point firstObstacleCoordinates = new Point(6, 8);
 
       //when
-      letterCollector.moveAndCollectUntilObstacle(path, currentLocation, currentDirection, pathAsCharacters);
+      letterCollector.moveAndCollectUntilObstacle(path, currentPosition, currentDirection, pathAsCharacters);
 
       //then
-      assertThat(currentLocation.x, is(firstObstacleCoordinates.x));
-      assertThat(currentLocation.y, is(firstObstacleCoordinates.y));
+      assertThat(currentPosition.x, is(firstObstacleCoordinates.x));
+      assertThat(currentPosition.y, is(firstObstacleCoordinates.y));
       assertThat(pathAsCharacters.toString(), equalTo("||"));
    }
 }

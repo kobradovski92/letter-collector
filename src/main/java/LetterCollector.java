@@ -23,19 +23,19 @@ public class LetterCollector {
       Direction direction = null;
       int numberOfPossibleDirections = 0;
 
-      if (currentDirection != Direction.LEFT && (firstCharToRight == HORIZONTAL_PATH_CHARACTER || (firstCharToRight >= 'A' && firstCharToRight <= 'Z'))) {
+      if (currentDirection != Direction.LEFT && (firstCharToRight == HORIZONTAL_PATH_CHARACTER || (isLetter(firstCharToRight)))) {
          direction = Direction.RIGHT;
          numberOfPossibleDirections++;
       }
-      if (currentDirection != Direction.RIGHT && (firstCharToLeft == HORIZONTAL_PATH_CHARACTER || (firstCharToLeft >= 'A' && firstCharToLeft <= 'Z'))) {
+      if (currentDirection != Direction.RIGHT && (firstCharToLeft == HORIZONTAL_PATH_CHARACTER || (isLetter(firstCharToLeft)))) {
          direction = Direction.LEFT;
          numberOfPossibleDirections++;
       }
-      if (currentDirection != Direction.UP && (firstCharToDown == VERTICAL_PATH_CHARACTER || (firstCharToDown >= 'A' && firstCharToDown <= 'Z'))) {
+      if (currentDirection != Direction.UP && (firstCharToDown == VERTICAL_PATH_CHARACTER || (isLetter(firstCharToDown)))) {
          direction = Direction.DOWN;
          numberOfPossibleDirections++;
       }
-      if (currentDirection != Direction.DOWN && (firstCharToUp == VERTICAL_PATH_CHARACTER || (firstCharToUp >= 'A' && firstCharToUp <= 'Z'))) {
+      if (currentDirection != Direction.DOWN && (firstCharToUp == VERTICAL_PATH_CHARACTER || isLetter(firstCharToUp))) {
          direction = Direction.UP;
          numberOfPossibleDirections++;
       }
@@ -89,28 +89,33 @@ public class LetterCollector {
 
    public boolean isObstacle(char character) {
       return (character == '+'
-            || (character >= 'A' && character <= 'Z')
+            || (isLetter(character))
             || character == 'x');
    }
 
 
-   public void moveAndCollectUntilObstacle(char[][] path, Point currentLocation, Direction currentDirection, StringBuilder pathAsCharacters) {
+   public void moveAndCollectUntilObstacle(char[][] path, Point currentPosition, Direction currentDirection, StringBuilder pathAsCharacters) {
       do {
          if (currentDirection == Direction.RIGHT) {
-            currentLocation.y++;
+            currentPosition.y++;
             pathAsCharacters.append('-');
          } else if (currentDirection == Direction.LEFT) {
-            currentLocation.y--;
+            currentPosition.y--;
             pathAsCharacters.append('-');
          } else if (currentDirection == Direction.DOWN) {
-            currentLocation.x++;
+            currentPosition.x++;
             pathAsCharacters.append('|');
          } else if (currentDirection == Direction.UP) {
-            currentLocation.x--;
+            currentPosition.x--;
             pathAsCharacters.append('|');
          }
-      } while (!isObstacle(path[currentLocation.x][currentLocation.y]));
+      } while (!isObstacle(path[currentPosition.x][currentPosition.y]));
       pathAsCharacters.deleteCharAt(pathAsCharacters.length() - 1);
    }
+
+   private boolean isLetter(char character) {
+      return character >= 'A' && character <= 'Z';
+   }
+
 
 }
