@@ -568,6 +568,7 @@ public class LetterCollectorTest {
 
    // **********EXAMPLES FROM GIT!*********** //
 
+   //VALID MAPS//
    //EXAMPLE1
    @Test
    public void resolvePath_PathExampleOne_RightLettersAreCollectedAndRightPathTraveled() throws Exception{
@@ -689,4 +690,107 @@ public class LetterCollectorTest {
       assertThat(resolvedPath.getCollectedLetters(), equalTo(expectedCollectedLettersResult));
    }
 
+   // INVALID MAPS //
+
+   //EXAMPLE6
+   @Test(expected = NoPathStartException.class)
+   public void resolvePath_PathExampleSix_NoPathStartExceptionIsThrown() throws Exception{
+      //given
+      char[][] path = {
+            {' ', ' ', ' ', '-', 'A', '-', '-', '-', '+'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|'},
+            {'x', '-', 'B', '-', '+', ' ', ' ', ' ', 'C'},
+            {' ', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|'},
+            {' ', ' ', ' ', ' ', '+', '-', '-', '-', '+'},
+      };
+      LetterCollector letterCollector = new LetterCollector();
+
+
+      //when
+      letterCollector.resolvePath(path);
+
+      //then
+   }
+
+   //EXAMPLE7
+   @Test(expected = NoPathEndException.class)
+   public void resolvePath_PathExampleSeven_NoPathEndExceptionIsThrown() throws Exception{
+      //given
+      char[][] path = {
+            {'@', '-', '-', '-', 'A', '-', '-', '-', '+'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|'},
+            {' ', ' ', 'B', '-', '+', ' ', ' ', ' ', 'C'},
+            {' ', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|'},
+            {' ', ' ', ' ', ' ', '+', '-', '-', '-', '+'},
+      };
+      LetterCollector letterCollector = new LetterCollector();
+
+
+      //when
+      letterCollector.resolvePath(path);
+
+      //then
+   }
+
+   //EXAMPLE8
+   @Test(expected = MultiplePathStartsException.class)
+   public void resolvePath_PathExampleEight_MultiplePathStartsExceptionIsThrown() throws Exception{
+      //given
+      char[][] path = {
+            {'@', '-', '-', '-', 'A', '-', '@', '-', '+'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|'},
+            {'x', '-', 'B', '-', '+', ' ', ' ', ' ', 'C'},
+            {' ', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|'},
+            {' ', ' ', ' ', ' ', '+', '-', '-', '-', '+'},
+      };
+      LetterCollector letterCollector = new LetterCollector();
+
+
+      //when
+      letterCollector.resolvePath(path);
+
+      //then
+   }
+
+   //EXAMPLE9
+   @Test(expected = MultiplePathEndsException.class)
+   public void resolvePath_PathExampleNine_MultiplePathEndsExceptionIsThrown() throws Exception{
+      //given
+      char[][] path = {
+            {'@', '-', '-', '-', 'A', '-', '-', '-', '+'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '|'},
+            {'x', '-', 'B', 'x', '+', ' ', ' ', ' ', 'C'},
+            {' ', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|'},
+            {' ', ' ', ' ', ' ', '+', '-', '-', '-', '+'},
+      };
+      LetterCollector letterCollector = new LetterCollector();
+
+
+      //when
+      letterCollector.resolvePath(path);
+
+      //then
+   }
+
+   //EXAMPLE10
+   @Test(expected = UnclearDirectionException.class)
+   public void resolvePath_PathExampleTen_UnclearDirectionExceptionIsThrown() throws Exception{
+      //given
+      char[][] path = {
+            {' ', ' ', ' ', ' ', ' ', 'x', '-', 'B'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', '|'},
+            {'@', '-', '-', 'A', '-', '-', '-', '+'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', '|'},
+            {' ', ' ', '+', '+', ' ', ' ', ' ', 'C'},
+            {' ', ' ', ' ', '|', ' ', ' ', ' ', '|'},
+            {' ', ' ', ' ', '+', '-', '-', '-', '+'},
+      };
+      LetterCollector letterCollector = new LetterCollector();
+
+
+      //when
+      letterCollector.resolvePath(path);
+
+      //then
+   }
 }
