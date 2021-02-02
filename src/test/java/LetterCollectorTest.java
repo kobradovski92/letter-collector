@@ -177,15 +177,15 @@ public class LetterCollectorTest {
    public void findPathDirection_DirectionUpOnlyPossible_DirectionUpIsReturned() throws Exception {
       //given
       char[][] path = {
-            {'|','-','-','-','A','-','-','-','+'},
+            {'+','-','-','-','A','-','-','-','+'},
+            {'|',' ',' ',' ',' ',' ',' ',' ','|'},
             {'@',' ',' ',' ',' ',' ',' ',' ','|'},
-            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
             {' ',' ',' ',' ',' ',' ',' ',' ','C'},
             {' ',' ',' ',' ',' ',' ',' ',' ','|'},
             {' ',' ',' ',' ',' ',' ',' ',' ','|'},
             {'x','-','B','-','-','-','-','-','+'},
       };
-      Point currentPosition = new Point(1,0);
+      Point currentPosition = new Point(2,0);
       LetterCollector letterCollector = new LetterCollector();
 
       //when
@@ -199,9 +199,9 @@ public class LetterCollectorTest {
    public void findPathDirection_CurrentLocationIsOnTCross_UnclearDirectionExceptionIsThrown() throws Exception {
       //given
       char[][] path = {
-            {'|','-','-','-','A','-','-','-','+'},
+            {'+','-','-','-','A','-','-','-','+'},
+            {'|',' ',' ',' ',' ',' ',' ',' ','|'},
             {'@',' ',' ',' ',' ',' ',' ',' ','|'},
-            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
             {' ',' ',' ',' ',' ',' ','-','-','C'},
             {' ',' ',' ',' ',' ',' ',' ',' ','|'},
             {' ',' ',' ',' ',' ',' ',' ',' ','|'},
@@ -220,9 +220,9 @@ public class LetterCollectorTest {
    public void findPathDirection_LeftAndRightDirectionPossibleWithCurrentDirectionRight_DirectionRightIsReturned() throws Exception {
       //given
       char[][] path = {
-            {'|','-','-','-','A','-','-','-','+'},
+            {'+','-','-','-','A','-','-','-','+'},
+            {'|',' ',' ',' ',' ',' ',' ',' ','|'},
             {'@',' ',' ',' ',' ',' ',' ',' ','|'},
-            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
             {' ',' ',' ',' ',' ',' ',' ',' ','C'},
             {' ',' ',' ',' ',' ',' ',' ',' ','|'},
             {' ',' ',' ',' ',' ',' ',' ',' ','|'},
@@ -242,9 +242,9 @@ public class LetterCollectorTest {
    public void findPathDirection_UpAndDownDirectionPossibleWithCurrentDirectionDown_DirectionDownIsReturned() throws Exception {
       //given
       char[][] path = {
-            {'|','-','-','-','A','-','-','-','+'},
+            {'+','-','-','-','A','-','-','-','+'},
+            {'|',' ',' ',' ',' ',' ',' ',' ','|'},
             {'@',' ',' ',' ',' ',' ',' ',' ','|'},
-            {' ',' ',' ',' ',' ',' ',' ',' ','|'},
             {' ',' ',' ',' ',' ',' ',' ',' ','C'},
             {' ',' ',' ',' ',' ',' ',' ',' ','|'},
             {' ',' ',' ',' ',' ',' ',' ',' ','|'},
@@ -277,6 +277,32 @@ public class LetterCollectorTest {
    public void isObstacle_GivenCharacterIsLetter_ReturnsTrue() {
       //given
       char obstacleChar = 'C';
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      boolean obstacle = letterCollector.isObstacle(obstacleChar);
+
+      //then
+      assertThat(obstacle, is(true));
+   }
+
+   @Test
+   public void isObstacle_GivenCharacterIsFirstPossibleLetter_ReturnsTrue() {
+      //given
+      char obstacleChar = 'A';
+      LetterCollector letterCollector = new LetterCollector();
+
+      //when
+      boolean obstacle = letterCollector.isObstacle(obstacleChar);
+
+      //then
+      assertThat(obstacle, is(true));
+   }
+
+   @Test
+   public void isObstacle_GivenCharacterIsLastPossibleLetter_ReturnsTrue() {
+      //given
+      char obstacleChar = 'Z';
       LetterCollector letterCollector = new LetterCollector();
 
       //when

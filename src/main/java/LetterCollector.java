@@ -89,7 +89,7 @@ public class LetterCollector {
 
    public boolean isObstacle(char character) {
       return (character == '+'
-            || (character > 'A' && character < 'Z')
+            || (character >= 'A' && character <= 'Z')
             || character == 'x');
    }
 }
