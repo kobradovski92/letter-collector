@@ -117,5 +117,10 @@ public class LetterCollector {
       return character >= 'A' && character <= 'Z';
    }
 
-
+   public void collectIfLetter(char[][] path, Point currentPosition, StringBuilder collectedLetters) {
+      char character = path[currentPosition.x][currentPosition.y];
+      if (isLetter(character)) {
+         collectedLetters.append(character);
+      }
+   }
 }
