@@ -92,4 +92,25 @@ public class LetterCollector {
             || (character >= 'A' && character <= 'Z')
             || character == 'x');
    }
+
+
+   public void moveAndCollectUntilObstacle(char[][] path, Point currentLocation, Direction currentDirection, StringBuilder pathAsCharacters) {
+      do {
+         if (currentDirection == Direction.RIGHT) {
+            currentLocation.y++;
+            pathAsCharacters.append('-');
+         } else if (currentDirection == Direction.LEFT) {
+            currentLocation.y--;
+            pathAsCharacters.append('-');
+         } else if (currentDirection == Direction.DOWN) {
+            currentLocation.x++;
+            pathAsCharacters.append('|');
+         } else if (currentDirection == Direction.UP) {
+            currentLocation.x--;
+            pathAsCharacters.append('|');
+         }
+      } while (!isObstacle(path[currentLocation.x][currentLocation.y]));
+      pathAsCharacters.deleteCharAt(pathAsCharacters.length() - 1);
+   }
+
 }
