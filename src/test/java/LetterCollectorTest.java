@@ -21,7 +21,7 @@ public class LetterCollectorTest {
       LetterCollector letterCollector = new LetterCollector();
       char[][] path = {
             {'-', ' ', '-'},
-            {' ', LetterCollector.PATH_START_CHARACTER, '-'}
+            {' ', '@', '-'}
       };
 
       // when
@@ -37,8 +37,8 @@ public class LetterCollectorTest {
       // given
       LetterCollector letterCollector = new LetterCollector();
       char[][] path = {
-            {'-', LetterCollector.PATH_START_CHARACTER, '-'},
-            {' ', LetterCollector.PATH_START_CHARACTER, '-'}
+            {'-', '@', '-'},
+            {' ', '@', '-'}
       };
 
       // when
@@ -68,7 +68,7 @@ public class LetterCollectorTest {
       LetterCollector letterCollector = new LetterCollector();
       char[][] path = {
             {'-', ' ', '-'},
-            {' ', LetterCollector.PATH_END_CHARACTER, '-'}
+            {' ', 'x', '-'}
       };
 
       // when
@@ -84,8 +84,8 @@ public class LetterCollectorTest {
       // given
       LetterCollector letterCollector = new LetterCollector();
       char[][] path = {
-            {'-', LetterCollector.PATH_END_CHARACTER, '-'},
-            {' ', LetterCollector.PATH_END_CHARACTER, '-'}
+            {'-', 'x', '-'},
+            {' ', 'x', '-'}
       };
 
       // when
@@ -571,7 +571,7 @@ public class LetterCollectorTest {
    //VALID MAPS//
    //EXAMPLE1
    @Test
-   public void resolvePath_PathExampleOne_RightLettersAreCollectedAndRightPathTraveled() throws Exception{
+   public void resolvePath_PathExampleOne_RightLettersAreCollectedAndRightPathTraveled() throws Exception {
       //given
       char[][] path = {
             {'@', '-', '-', '-', 'A', '-', '-', '-', '+'},
@@ -595,7 +595,7 @@ public class LetterCollectorTest {
 
    //EXAMPLE2
    @Test
-   public void resolvePath_PathExampleTwo_RightLettersAreCollectedAndRightPathTraveled() throws Exception{
+   public void resolvePath_PathExampleTwo_RightLettersAreCollectedAndRightPathTraveled() throws Exception {
       //given
       char[][] path = {
             {'@', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -621,7 +621,7 @@ public class LetterCollectorTest {
 
    //EXAMPLE3
    @Test
-   public void resolvePath_PathExampleThree_RightLettersAreCollectedAndRightPathTraveled() throws Exception{
+   public void resolvePath_PathExampleThree_RightLettersAreCollectedAndRightPathTraveled() throws Exception {
       //given
       char[][] path = {
             {'@', '-', '-', '-', 'A', '-', '-', '-', '+'},
@@ -645,7 +645,7 @@ public class LetterCollectorTest {
 
    //EXAMPLE4
    @Test
-   public void resolvePath_PathExampleFour_RightLettersAreCollectedAndRightPathTraveled() throws Exception{
+   public void resolvePath_PathExampleFour_RightLettersAreCollectedAndRightPathTraveled() throws Exception {
       //given
       char[][] path = {
             {' ', ' ', ' ', '+', '-', '-', 'B', '-', '-', '+', ' ', ' '},
@@ -667,9 +667,10 @@ public class LetterCollectorTest {
       assertThat(resolvedPath.getPathAsCharacters(), equalTo(expectedPathAsCharactersResult));
       assertThat(resolvedPath.getCollectedLetters(), equalTo(expectedCollectedLettersResult));
    }
+
    //EXAMPLE5
    @Test
-   public void resolvePath_PathExampleFive_RightLettersAreCollectedAndRightPathTraveled() throws Exception{
+   public void resolvePath_PathExampleFive_RightLettersAreCollectedAndRightPathTraveled() throws Exception {
       //given
       char[][] path = {
             {' ', '+', '-', 'B', '-', '+', ' ', ' ', ' '},
@@ -694,7 +695,7 @@ public class LetterCollectorTest {
 
    //EXAMPLE6
    @Test(expected = NoPathStartException.class)
-   public void resolvePath_PathExampleSix_NoPathStartExceptionIsThrown() throws Exception{
+   public void resolvePath_PathExampleSix_NoPathStartExceptionIsThrown() throws Exception {
       //given
       char[][] path = {
             {' ', ' ', ' ', '-', 'A', '-', '-', '-', '+'},
@@ -714,7 +715,7 @@ public class LetterCollectorTest {
 
    //EXAMPLE7
    @Test(expected = NoPathEndException.class)
-   public void resolvePath_PathExampleSeven_NoPathEndExceptionIsThrown() throws Exception{
+   public void resolvePath_PathExampleSeven_NoPathEndExceptionIsThrown() throws Exception {
       //given
       char[][] path = {
             {'@', '-', '-', '-', 'A', '-', '-', '-', '+'},
@@ -734,7 +735,7 @@ public class LetterCollectorTest {
 
    //EXAMPLE8
    @Test(expected = MultiplePathStartsException.class)
-   public void resolvePath_PathExampleEight_MultiplePathStartsExceptionIsThrown() throws Exception{
+   public void resolvePath_PathExampleEight_MultiplePathStartsExceptionIsThrown() throws Exception {
       //given
       char[][] path = {
             {'@', '-', '-', '-', 'A', '-', '@', '-', '+'},
@@ -754,7 +755,7 @@ public class LetterCollectorTest {
 
    //EXAMPLE9
    @Test(expected = MultiplePathEndsException.class)
-   public void resolvePath_PathExampleNine_MultiplePathEndsExceptionIsThrown() throws Exception{
+   public void resolvePath_PathExampleNine_MultiplePathEndsExceptionIsThrown() throws Exception {
       //given
       char[][] path = {
             {'@', '-', '-', '-', 'A', '-', '-', '-', '+'},
@@ -774,7 +775,7 @@ public class LetterCollectorTest {
 
    //EXAMPLE10
    @Test(expected = UnclearDirectionException.class)
-   public void resolvePath_PathExampleTen_UnclearDirectionExceptionIsThrown() throws Exception{
+   public void resolvePath_PathExampleTen_UnclearDirectionExceptionIsThrown() throws Exception {
       //given
       char[][] path = {
             {' ', ' ', ' ', ' ', ' ', 'x', '-', 'B'},

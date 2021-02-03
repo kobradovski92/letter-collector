@@ -11,10 +11,10 @@ import exceptions.UnclearDirectionException;
 import model.ResolvedPath;
 
 public class LetterCollector {
-   public static final char PATH_START_CHARACTER = '@';
-   public static final char PATH_END_CHARACTER = 'x';
-   public static final char HORIZONTAL_PATH_CHARACTER = '-';
-   public static final char VERTICAL_PATH_CHARACTER = '|';
+   private static final char PATH_START_CHARACTER = '@';
+   private static final char PATH_END_CHARACTER = 'x';
+   private static final char HORIZONTAL_PATH_CHARACTER = '-';
+   private static final char VERTICAL_PATH_CHARACTER = '|';
 
    public Direction findPathDirection(char[][] path, Point currentPosition, Direction currentDirection) throws UnclearDirectionException {
       char firstCharToRight = (currentPosition.y < (path[currentPosition.x].length - 1)) ? path[currentPosition.x][currentPosition.y + 1] : ' ';
@@ -25,19 +25,19 @@ public class LetterCollector {
       Direction direction = null;
       int numberOfPossibleDirections = 0;
 
-      if (currentDirection != Direction.LEFT && (firstCharToRight == HORIZONTAL_PATH_CHARACTER || (isLetter(firstCharToRight)) || firstCharToRight == '+' || firstCharToLeft == '@')) {
+      if (currentDirection != Direction.LEFT && (firstCharToRight == HORIZONTAL_PATH_CHARACTER || (isLetter(firstCharToRight)) || firstCharToRight == '+' || firstCharToLeft == PATH_START_CHARACTER)) {
          direction = Direction.RIGHT;
          numberOfPossibleDirections++;
       }
-      if (currentDirection != Direction.RIGHT && (firstCharToLeft == HORIZONTAL_PATH_CHARACTER || (isLetter(firstCharToLeft)) || firstCharToLeft == '+' || firstCharToLeft == '@')) {
+      if (currentDirection != Direction.RIGHT && (firstCharToLeft == HORIZONTAL_PATH_CHARACTER || (isLetter(firstCharToLeft)) || firstCharToLeft == '+' || firstCharToLeft == PATH_START_CHARACTER)) {
          direction = Direction.LEFT;
          numberOfPossibleDirections++;
       }
-      if (currentDirection != Direction.UP && (firstCharToDown == VERTICAL_PATH_CHARACTER || (isLetter(firstCharToDown)) || firstCharToDown == '+' || firstCharToLeft == '@')) {
+      if (currentDirection != Direction.UP && (firstCharToDown == VERTICAL_PATH_CHARACTER || (isLetter(firstCharToDown)) || firstCharToDown == '+' || firstCharToLeft == PATH_START_CHARACTER)) {
          direction = Direction.DOWN;
          numberOfPossibleDirections++;
       }
-      if (currentDirection != Direction.DOWN && (firstCharToUp == VERTICAL_PATH_CHARACTER || (isLetter(firstCharToUp)) || firstCharToUp == '+' || firstCharToLeft == '@')) {
+      if (currentDirection != Direction.DOWN && (firstCharToUp == VERTICAL_PATH_CHARACTER || (isLetter(firstCharToUp)) || firstCharToUp == '+' || firstCharToLeft == PATH_START_CHARACTER)) {
          direction = Direction.UP;
          numberOfPossibleDirections++;
       }
@@ -94,8 +94,8 @@ public class LetterCollector {
    public boolean isObstacle(char character) {
       return (
             character == '+'
-            || (isLetter(character))
-            || character == 'x'
+                  || (isLetter(character))
+                  || character == PATH_END_CHARACTER
       );
    }
 
@@ -119,7 +119,7 @@ public class LetterCollector {
       pathAsCharacters.deleteCharAt(pathAsCharacters.length() - 1);
    }
 
-   public boolean isLetter(char character) {
+   private boolean isLetter(char character) {
       return character >= 'A' && character <= 'Z';
    }
 
@@ -139,7 +139,7 @@ public class LetterCollector {
 
       Direction direction = null;
 
-     do {
+      do {
          direction = findPathDirection(path, currentPosition, direction);
          moveAndCollectUntilObstacle(path, currentPosition, direction, pathAsCharactersBuilder);
          pathAsCharactersBuilder.append(path[currentPosition.x][currentPosition.y]);
